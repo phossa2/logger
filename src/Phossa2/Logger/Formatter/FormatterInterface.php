@@ -12,30 +12,27 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa2\Logger\Message;
+namespace Phossa2\Logger\Formatter;
 
-use Phossa2\Shared\Message\Message as BaseMessage;
+use Phossa2\Logger\Entry\LogEntryInterface;
 
 /**
- * Mesage class for Phossa2\Logger
+ * FormatterInterface
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     \Phossa2\Shared\Message\Message
  * @version 2.0.0
  * @since   2.0.0 added
  */
-class Message extends BaseMessage
+interface FormatterInterface
 {
-    /*
-     * Invalid log level "%s"
-     */
-    const LOG_LEVEL_INVALID = 1607191058;
-
     /**
-     * {@inheritDoc}
+     * Format a log entry
+     *
+     * @param  LogEntryInterface $logEntry the log entry
+     * @return string
+     * @access public
+     * @api
      */
-    protected static $messages = [
-        self::LOG_LEVEL_INVALID => 'Invalid log level "%s"',
-    ];
+    public function __invoke(LogEntryInterface $logEntry)/*# : string */;
 }

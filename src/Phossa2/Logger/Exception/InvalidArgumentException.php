@@ -12,18 +12,20 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa2\Logger\Message;
+namespace Phossa2\Logger\Exception;
 
-use Phossa2\Logger\Message\Message;
+use Psr\Log\InvalidArgumentException as PsrInvalidArgumentException;
 
-/*
- * Provide zh_CN translation
+/**
+ * InvalidArgumentException for Phossa2\Logger
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     ExceptionInterface
+ * @see     \Psr\Log\InvalidArgumentException
  * @version 2.0.0
  * @since   2.0.0 added
  */
-return [
-    Message::LOG_LEVEL_INVALID => '未知日志级别名称 "%s"',
-];
+class InvalidArgumentException extends PsrInvalidArgumentException implements ExceptionInterface
+{
+}
