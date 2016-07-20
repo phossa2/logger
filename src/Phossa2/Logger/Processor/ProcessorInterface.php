@@ -12,19 +12,19 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa2\Logger\Decorator;
+namespace Phossa2\Logger\Processor;
 
 use Phossa2\Logger\Entry\LogEntryInterface;
 
 /**
- * DecoratorInterface
+ * ProcessorInterface
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @version 2.0.0
  * @since   2.0.0 added
  */
-interface DecoratorInterface
+interface ProcessorInterface
 {
     /**
      * Decorating a log entry

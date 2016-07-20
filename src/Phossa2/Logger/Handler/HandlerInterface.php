@@ -15,16 +15,18 @@
 namespace Phossa2\Logger\Handler;
 
 use Phossa2\Logger\Entry\LogEntryInterface;
+use Phossa2\Logger\Formatter\FormatterAwareInterface;
 
 /**
  * HandlerInterface
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     FormatterAwareInterface
  * @version 2.0.0
  * @since   2.0.0 added
  */
-interface HandlerInterface
+interface HandlerInterface extends FormatterAwareInterface
 {
     /**
      * Handlering a log entry
@@ -34,4 +36,13 @@ interface HandlerInterface
      * @api
      */
     public function __invoke(LogEntryInterface $logEntry);
+
+    /**
+     * Is this handler handling this level of message ?
+     *
+     * @param  string $level
+     * @return bool
+     * @access public
+     */
+    public function isHandling(/*# string */ $level)/*# : bool */;
 }

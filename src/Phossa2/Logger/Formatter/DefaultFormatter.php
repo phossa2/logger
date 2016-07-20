@@ -35,7 +35,7 @@ class DefaultFormatter extends ObjectAbstract implements FormatterInterface
      * @var    string
      * @access protected
      */
-    protected $format = '[%datetime%] %level%: %message%';
+    protected $format = '[%datetime%] %channel%.%level%: %message%';
 
     /**
      * {@inheritDoc}
@@ -45,7 +45,8 @@ class DefaultFormatter extends ObjectAbstract implements FormatterInterface
         $data = [
             '%datetime%'    => date('Y-m-d H:i:s', $logEntry->getTimestamp()),
             '%level%'       => strtoupper($logEntry->getLevel()),
-            '%message%'     => $logEntry->getMessage()
+            '%message%'     => $logEntry->getMessage(),
+            '%channel%'     => $logEntry->getChannel(),
         ];
         return strtr($this->format, $data);
     }

@@ -12,22 +12,22 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa2\Logger\Decorator;
+namespace Phossa2\Logger\Processor;
 
 use Phossa2\Shared\Base\ObjectAbstract;
 use Phossa2\Logger\Entry\LogEntryInterface;
 
 /**
- * InterpolateDecorator
+ * InterpolateProcessor
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     ObjectAbstract
- * @see     DecoratorInterface
+ * @see     ProcessorInterface
  * @version 2.0.0
  * @since   2.0.0 added
  */
-class InterpolateDecorator extends ObjectAbstract implements DecoratorInterface
+class InterpolateProcessor extends ObjectAbstract implements ProcessorInterface
 {
     /**
      * Replace any '{item}' in the messsage with context['item'] value
@@ -160,13 +160,13 @@ class InterpolateDecorator extends ObjectAbstract implements DecoratorInterface
         /*# string */ $placeholder,
         $data
     )/*# : string */ {
-        list($first, $second) = explode('.', $name, 2);
+        list(, $second) = explode('.', $name, 2);
 
-        if (is_array($data) && isset($data[$second])) {
+        if ((is_array($data) && isset($data[$second]))) {
             return $data[$second];
         }
 
-        if (is_object($data) && isset($data->$second)) {
+        if ((is_object($data) && isset($data->$second))) {
             return $data->$second;
         }
 

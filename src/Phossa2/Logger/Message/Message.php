@@ -32,10 +32,16 @@ class Message extends BaseMessage
      */
     const LOG_LEVEL_INVALID = 1607191058;
 
+    /*
+     * Must set channel before using logger
+     */
+    const LOG_CHANNEL_NOTSET = 1607191059;
+
     /**
      * {@inheritDoc}
      */
     protected static $messages = [
         self::LOG_LEVEL_INVALID => 'Invalid log level "%s"',
+        self::LOG_CHANNEL_NOTSET => 'Must set channel before using logger',
     ];
 }

@@ -12,19 +12,18 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa2\Logger\Message;
+namespace Phossa2\Logger\Exception;
 
-use Phossa2\Logger\Message\Message;
-
-/*
- * Provide zh_CN translation
+/**
+ * RuntimeException for Phossa2\Logger
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     ExceptionInterface
+ * @see     \RuntimeException
  * @version 2.0.0
  * @since   2.0.0 added
  */
-return [
-    Message::LOG_LEVEL_INVALID => '未知日志级别名称 "%s"',
-    Message::LOG_CHANNEL_NOTSET => '必须每次都设置日志标识',
-];
+class RuntimeException extends \RuntimeException implements ExceptionInterface
+{
+}

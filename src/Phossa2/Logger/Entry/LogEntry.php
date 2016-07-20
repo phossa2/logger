@@ -37,6 +37,12 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
      * @var    string
      * @access protected
      */
+    protected $channel;
+
+    /**
+     * @var    string
+     * @access protected
+     */
     protected $message;
 
     /**
@@ -58,8 +64,17 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
     protected $timestamp;
 
     /**
+     * is log stopped propagation ?
+     *
+     * @var    bool
+     * @access protected
+     */
+    protected $stopped = false;
+
+    /**
      * Create the log entry
      *
+     * @param  string $channel
      * @param  string $level
      * @param  string $message
      * @param  array $context
@@ -68,16 +83,36 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
      * @access protected
      */
     public function __construct(
+        /*# string */ $channel,
         /*# string */ $level,
         /*# string */ $message,
         array $context = [],
         /*# float */ $timestamp = 0
     ) {
         $this
+            ->setChannel($channel)
             ->setLevel($level)
             ->setMessage($message)
             ->setContext($context)
             ->setTimestamp($timestamp);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setChannel(
+        /*# string */ $channel
+    ) {
+        $this->channel = $channel;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChannel()/*# : string */
+    {
+        return $this->channel;
     }
 
     /**
@@ -155,6 +190,23 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
     public function getContext()/*# : array */
     {
         return $this->context;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function stopPropagation(/*# : bool */ $flag = true)
+    {
+        $this->stopped = (bool) $flag;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isPropagationStopped()/*# : bool */
+    {
+        return $this->stopped;
     }
 
     /**

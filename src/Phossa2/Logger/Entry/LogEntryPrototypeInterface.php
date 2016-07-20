@@ -12,19 +12,27 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa2\Logger\Message;
+namespace Phossa2\Logger\Entry;
 
-use Phossa2\Logger\Message\Message;
-
-/*
- * Provide zh_CN translation
+/**
+ * LogEntryPrototypeInterface
+ *
+ * Dealing with prototype of LogEntry
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @version 2.0.0
  * @since   2.0.0 added
  */
-return [
-    Message::LOG_LEVEL_INVALID => '未知日志级别名称 "%s"',
-    Message::LOG_CHANNEL_NOTSET => '必须每次都设置日志标识',
-];
+interface LogEntryPrototypeInterface
+{
+    /**
+     * Setup log entry prototype
+     *
+     * @param  LogEntryInterface $logEntry
+     * @return $this
+     * @access public
+     * @api
+     */
+    public function setLogEntryPrototype(LogEntryInterface $logEntry = null);
+}

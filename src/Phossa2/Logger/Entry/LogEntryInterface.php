@@ -28,6 +28,27 @@ use Phossa2\Logger\Exception\InvalidArgumentException;
 interface LogEntryInterface
 {
     /**
+     * Set log channel
+     *
+     * @param  string $channel
+     * @return $this
+     * @access public
+     * @api
+     */
+    public function setChannel(
+        /*# string */ $channel
+    );
+
+    /**
+     * Get log channel
+     *
+     * @return string
+     * @access public
+     * @api
+     */
+    public function getChannel()/*# : string */;
+
+    /**
      * Set log message
      *
      * @param  string $message the original message string
@@ -40,7 +61,7 @@ interface LogEntryInterface
     );
 
     /**
-     * Get the original message
+     * Get log message
      *
      * @return string
      * @access public
@@ -109,6 +130,25 @@ interface LogEntryInterface
      * @api
      */
     public function getContext()/*# : array */;
+
+    /**
+     * Indicate whether or not to stop propagating this log
+     *
+     * @param  bool $flag
+     * @return $this
+     * @access public
+     * @api
+     */
+    public function stopPropagation(/*# : bool */ $flag = true);
+
+    /**
+     * Has this log indicated propagation should stop?
+     *
+     * @return bool
+     * @access public
+     * @api
+     */
+    public function isPropagationStopped()/*# : bool */;
 
     /**
      * To string
