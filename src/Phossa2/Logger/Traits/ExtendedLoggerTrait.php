@@ -19,6 +19,7 @@ use Phossa2\Shared\Queue\PriorityQueue;
 use Phossa2\Shared\Globbing\GlobbingTrait;
 use Phossa2\Logger\Entry\LogEntryInterface;
 use Phossa2\Logger\Exception\RuntimeException;
+use Phossa2\Logger\Handler\HandlerInterface;
 
 /**
  * ExtendedLoggerTrait
@@ -214,7 +215,8 @@ trait ExtendedLoggerTrait
     /**
      * Get all matching handlers/processors with channel name globbing
      *
-     * @param  string  $channel
+     * @param  string $type
+     * @param  string $channel
      * @return PriorityQueue
      * @access protected
      */
@@ -252,7 +254,7 @@ trait ExtendedLoggerTrait
         LogEntryInterface $logEntry,
         callable $handler
     )/*# : bool */ {
-        if (is_a($handler, 'Phossa2\\Logger\\Handler\\HandlerInterface')) {
+        if (is_object($handler) && $handler instanceof HandlerInterface) {
             return $handler->isHandling($logEntry->getLevel());
         } else {
             return true;

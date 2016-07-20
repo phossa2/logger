@@ -39,7 +39,7 @@ class InterpolateProcessor extends ObjectAbstract implements ProcessorInterface
     public function __invoke(LogEntryInterface $logEntry)
     {
         $message = $logEntry->getMessage();
-        $context = $logEntry->getContexts();
+        $context = $logEntry->getContext();
 
         $replace = [];
         foreach ($this->getPlaceHolders($message) as $name => $ph) {
