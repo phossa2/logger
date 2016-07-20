@@ -27,7 +27,7 @@ use Phossa2\Logger\Entry\LogEntryInterface;
 interface ProcessorInterface
 {
     /**
-     * Decorating a log entry
+     * Process a log entry
      *
      * @param  LogEntryInterface $logEntry the log entry
      * @access public

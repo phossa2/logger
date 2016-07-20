@@ -27,4 +27,5 @@ use Phossa2\Logger\Message\Message;
 return [
     Message::LOG_LEVEL_INVALID => '未知日志级别名称 "%s"',
     Message::LOG_CHANNEL_NOTSET => '必须每次都设置日志标识',
+    Message::LOG_SYSLOG_FAIL => '写入系统日志  "%s:%s" 失败',
 ];

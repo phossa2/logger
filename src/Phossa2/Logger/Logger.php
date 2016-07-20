@@ -24,6 +24,8 @@ use Phossa2\Logger\Entry\LogEntryPrototypeInterface;
 /**
  * Logger
  *
+ * Implementation of LoggerInterface
+ *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     ObjectAbstract

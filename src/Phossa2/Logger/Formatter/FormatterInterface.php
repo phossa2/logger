@@ -30,9 +30,8 @@ interface FormatterInterface
      * Format a log entry
      *
      * @param  LogEntryInterface $logEntry the log entry
-     * @return string
      * @access public
      * @api
      */
-    public function __invoke(LogEntryInterface $logEntry)/*# : string */;
+    public function __invoke(LogEntryInterface $logEntry);
 }

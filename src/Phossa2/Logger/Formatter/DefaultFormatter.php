@@ -14,7 +14,6 @@
 
 namespace Phossa2\Logger\Formatter;
 
-use Phossa2\Shared\Base\ObjectAbstract;
 use Phossa2\Logger\Entry\LogEntryInterface;
 
 /**
@@ -22,12 +21,11 @@ use Phossa2\Logger\Entry\LogEntryInterface;
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     ObjectAbstract
- * @see     FormatterInterface
+ * @see     FormatterAbstract
  * @version 2.0.0
  * @since   2.0.0 added
  */
-class DefaultFormatter extends ObjectAbstract implements FormatterInterface
+class DefaultFormatter extends FormatterAbstract
 {
     /**
      * default message format
@@ -38,10 +36,24 @@ class DefaultFormatter extends ObjectAbstract implements FormatterInterface
     protected $format = '[%datetime%] %channel%.%level%: %message%';
 
     /**
+     * Inject the format if any
+     *
+     * @param string $format
+     * @access protected
+     */
+    public function __construct(/*# string */ $format = '')
+    {
+        if ($format) {
+            $this->format = $format;
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function __invoke(LogEntryInterface $logEntry)/*# : string */
-    {
+    protected function format(
+        LogEntryInterface $logEntry
+    )/*# : string */ {
         $data = [
             '%datetime%'    => date('Y-m-d H:i:s', $logEntry->getTimestamp()),
             '%level%'       => strtoupper($logEntry->getLevel()),

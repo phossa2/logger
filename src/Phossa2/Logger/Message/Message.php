@@ -37,11 +37,16 @@ class Message extends BaseMessage
      */
     const LOG_CHANNEL_NOTSET = 1607191059;
 
+    /*
+     * Syslog failed for "%s:%s"
+     */
+    const LOG_SYSLOG_FAIL = 1607191060;
     /**
      * {@inheritDoc}
      */
     protected static $messages = [
         self::LOG_LEVEL_INVALID => 'Invalid log level "%s"',
         self::LOG_CHANNEL_NOTSET => 'Must set channel before using logger',
+        self::LOG_SYSLOG_FAIL => 'Syslog failed for "%s:%s"',
     ];
 }

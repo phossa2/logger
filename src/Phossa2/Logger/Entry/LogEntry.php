@@ -58,6 +58,12 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
     protected $context;
 
     /**
+     * @var    string
+     * @access protected
+     */
+    protected $formatted;
+
+    /**
      * @var    float
      * @access protected
      */
@@ -155,6 +161,23 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
     public function getLevel()/*# : string */
     {
         return $this->level;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFormatted(/*# string */ $formatted)
+    {
+        $this->formatted = $formatted;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormatted()/*# string */
+    {
+        return $this->formatted;
     }
 
     /**

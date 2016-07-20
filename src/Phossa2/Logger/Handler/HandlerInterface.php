@@ -36,13 +36,4 @@ interface HandlerInterface extends FormatterAwareInterface
      * @api
      */
     public function __invoke(LogEntryInterface $logEntry);
-
-    /**
-     * Is this handler handling this level of message ?
-     *
-     * @param  string $level
-     * @return bool
-     * @access public
-     */
-    public function isHandling(/*# string */ $level)/*# : bool */;
 }

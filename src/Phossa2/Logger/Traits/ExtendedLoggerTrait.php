@@ -177,8 +177,7 @@ trait ExtendedLoggerTrait
 
         // loop thru these processors
         foreach($queue as $data) {
-            $processor = $data['data'];
-            $processor($logEntry);
+            ($data['data'])($logEntry);
         }
 
         return $this;
@@ -198,15 +197,13 @@ trait ExtendedLoggerTrait
 
         // loop thru these handlers
         foreach($queue as $data) {
+            // stopped ?
             if ($logEntry->isPropagationStopped()) {
                 break;
             }
 
-            $handler = $data['data'];
-
-            if ($this->isValidHandler($logEntry, $handler)) {
-                $handler($logEntry);
-            }
+            // run handler
+            ($data['data'])($logEntry);
         }
 
         return $this;
@@ -240,25 +237,6 @@ trait ExtendedLoggerTrait
         }
 
         return $queue;
-    }
-
-    /**
-     * Is this handler can do this log ?
-     *
-     * @param  LogEntryInterface $logEntry
-     * @param  callable $handler
-     * @return bool
-     * @access protected
-     */
-    protected function isValidHandler(
-        LogEntryInterface $logEntry,
-        callable $handler
-    )/*# : bool */ {
-        if (is_object($handler) && $handler instanceof HandlerInterface) {
-            return $handler->isHandling($logEntry->getLevel());
-        } else {
-            return true;
-        }
     }
 
     /**

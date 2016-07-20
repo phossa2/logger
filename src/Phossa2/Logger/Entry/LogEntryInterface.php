@@ -92,6 +92,25 @@ interface LogEntryInterface
     public function getLevel()/*# : string */;
 
     /**
+     * Set the formatted message
+     *
+     * @param  string $formatted
+     * @return $this
+     * @access public
+     * @api
+     */
+    public function setFormatted(/*# string */ $formatted);
+
+    /**
+     * Get the formatted message
+     *
+     * @return string
+     * @access public
+     * @api
+     */
+    public function getFormatted()/*# string */;
+
+    /**
      * Set timestamp, default is current UNIX timestamp in float
      *
      * @param  float $timestamp UNIX time in float, 0 for now
