@@ -162,12 +162,9 @@ class InterpolateProcessor extends ObjectAbstract implements ProcessorInterface
     )/*# : string */ {
         list(, $second) = explode('.', $name, 2);
 
-        if ((is_array($data) && isset($data[$second]))) {
-            return $data[$second];
-        }
-
-        if ((is_object($data) && isset($data->$second))) {
-            return $data->$second;
+        $arr = (array) $data;
+        if (isset($arr[$second])) {
+            return $arr[$second];
         }
 
         return $placeholder;
