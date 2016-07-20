@@ -19,7 +19,6 @@ use Phossa2\Shared\Queue\PriorityQueue;
 use Phossa2\Shared\Globbing\GlobbingTrait;
 use Phossa2\Logger\Entry\LogEntryInterface;
 use Phossa2\Logger\Exception\RuntimeException;
-use Phossa2\Logger\Handler\HandlerInterface;
 
 /**
  * ExtendedLoggerTrait
