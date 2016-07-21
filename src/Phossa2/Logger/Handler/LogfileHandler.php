@@ -43,7 +43,8 @@ class LogfileHandler extends StreamHandler
      * Constructor
      *
      * @param  string $path full path
-     * @param  int $rotate rotate type or filesize in M
+     * @param  int $rotate rotate type or filesize in MB
+     * @param  string $level
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
      * @throws LogicException if path not writable

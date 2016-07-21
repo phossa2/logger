@@ -51,7 +51,7 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     /**
      * Created with level handling
      *
-     * @param  string $logLevel
+     * @param  string $level
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
      * @access public

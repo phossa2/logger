@@ -83,13 +83,13 @@ class AnsiColorFormatter extends FormatterAbstract
      * @access  protected
      */
     protected $colors = array(
-        LogLevel::DEBUG     => [self::FGCOLOR_GRAY,  null, null],
-        LogLevel::INFO      => [null, null, null],
-        LogLevel::NOTICE    => [self::FGCOLOR_BRIGHT_GREEN, null, null],
-        LogLevel::WARNING   => [self::FGCOLOR_BRIGHT_YELLOW, null, null],
-        LogLevel::ERROR     => [self::FGCOLOR_BRIGHT_RED, null, null],
-        LogLevel::CRITICAL  => [self::FGCOLOR_BRIGHT_RED, null, self::DECO_UNDERLINE],
-        LogLevel::ALERT     => [self::FGCOLOR_BRIGHT_RED, self::BGCOLOR_WHITE, null],
+        LogLevel::DEBUG     => [self::FGCOLOR_GRAY, '', ''],
+        LogLevel::INFO      => ['', '', ''],
+        LogLevel::NOTICE    => [self::FGCOLOR_BRIGHT_GREEN, '', ''],
+        LogLevel::WARNING   => [self::FGCOLOR_BRIGHT_YELLOW, '', ''],
+        LogLevel::ERROR     => [self::FGCOLOR_BRIGHT_RED, '', ''],
+        LogLevel::CRITICAL  => [self::FGCOLOR_BRIGHT_RED, '', self::DECO_UNDERLINE],
+        LogLevel::ALERT     => [self::FGCOLOR_BRIGHT_RED, self::BGCOLOR_WHITE, ''],
         LogLevel::EMERGENCY => [self::FGCOLOR_BRIGHT_RED, self::BGCOLOR_WHITE, self::DECO_BLINK],
     );
 
@@ -156,9 +156,9 @@ class AnsiColorFormatter extends FormatterAbstract
         /*# string */ $text,
         array $definition
     )/*# : string */ {
-        $fgColor = $definition[0] ?: '';
-        $bgColor = $definition[1] ?: '';
-        $deColor = $definition[2] ?: '';
+        $fgColor = $definition[0];
+        $bgColor = $definition[1];
+        $deColor = $definition[2];
         $prefix  = $fgColor . $bgColor . $deColor;
         $suffix  = $prefix ? self::DECO_END : '';
         return $prefix . $text . $suffix;

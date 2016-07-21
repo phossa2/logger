@@ -48,7 +48,7 @@ class TerminalHandler extends StreamHandler
      *
      * @param  string $stream the stream
      * @param  bool $color use ANSI color formatter or not
-     * @param  string $logLevel
+     * @param  string $level
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
      * @access public
@@ -60,22 +60,17 @@ class TerminalHandler extends StreamHandler
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {
-        // skip non-CLI mode
         if (!$this->isCliMode()) {
             return;
         }
-
-        // use ansi color
         $this->color = (bool) $color;
 
-        // check stream
         if (!in_array($stream, ['php://stderr', 'php://stdout'])) {
             throw new LogicException(
                 Message::get(Message::LOG_STREAM_INVALID, $stream),
                 Message::LOG_STREAM_INVALID
             );
         }
-
         parent::__construct($stream, $level, $formatter, $stopPropagation);
     }
 

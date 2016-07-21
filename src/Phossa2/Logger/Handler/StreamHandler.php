@@ -45,7 +45,7 @@ class StreamHandler extends HandlerAbstract
      * Constructor
      *
      * @param  string|resource $stream the stream
-     * @param  string $logLevel
+     * @param  string $level
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
      * @access public
