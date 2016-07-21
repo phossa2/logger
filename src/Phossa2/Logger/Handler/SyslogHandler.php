@@ -17,11 +17,13 @@ namespace Phossa2\Logger\Handler;
 use Phossa2\Logger\LogLevel;
 use Phossa2\Logger\Message\Message;
 use Phossa2\Logger\Entry\LogEntryInterface;
-use Phossa2\Logger\Exception\RuntimeException;
+use Phossa2\Logger\Exception\LogicException;
 use Phossa2\Logger\Formatter\FormatterInterface;
 
 /**
  * SyslogHandler
+ *
+ * Log to syslog
  *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
@@ -75,7 +77,7 @@ class SyslogHandler extends HandlerAbstract
     public function __construct(
         /*# int */ $facility = LOG_USER,
         /*# int */ $logOpts  = LOG_PID,
-        /*# string */ $level = LogLevel::WARNING,
+        /*# string */ $level = LogLevel::DEBUG,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {
@@ -92,12 +94,11 @@ class SyslogHandler extends HandlerAbstract
         $ident = $logEntry->getChannel();
 
         if (!openlog($ident, $this->logopts, $this->facility)) {
-            throw new RuntimeException(
+            throw new LogicException(
                 Message::get(Message::LOG_SYSLOG_FAIL, $ident, $this->facility),
                 Message::LOG_SYSLOG_FAIL
             );
         }
-
 
         syslog(
             $this->priorities[$logEntry->getLevel()],

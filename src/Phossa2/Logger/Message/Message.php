@@ -41,6 +41,17 @@ class Message extends BaseMessage
      * Syslog failed for "%s:%s"
      */
     const LOG_SYSLOG_FAIL = 1607191060;
+
+    /*
+     * Open stream failed for "%s"
+     */
+    const LOG_STREAM_FAIL = 1607191061;
+
+    /*
+     * Invalid stream "%s"
+     */
+    const LOG_STREAM_INVALID = 1607191062;
+
     /**
      * {@inheritDoc}
      */
@@ -48,5 +59,7 @@ class Message extends BaseMessage
         self::LOG_LEVEL_INVALID => 'Invalid log level "%s"',
         self::LOG_CHANNEL_NOTSET => 'Must set channel before using logger',
         self::LOG_SYSLOG_FAIL => 'Syslog failed for "%s:%s"',
+        self::LOG_STREAM_FAIL => 'Open stream failed for "%s"',
+        self::LOG_STREAM_INVALID => 'Invalid stream "%s"',
     ];
 }

@@ -36,7 +36,7 @@ trait FormatterAwareTrait
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(callable $formatter)
+    public function setFormatter(callable $formatter = null)
     {
         $this->formatter = $formatter;
     }

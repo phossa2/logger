@@ -19,7 +19,6 @@ use Phossa2\Shared\Base\ObjectAbstract;
 use Phossa2\Logger\Entry\LogEntryInterface;
 use Phossa2\Logger\Formatter\FormatterInterface;
 use Phossa2\Logger\Formatter\FormatterAwareTrait;
-use Phossa2\Logger\Formatter\FormatterAwareInterface;
 
 /**
  * HandlerAbstract
@@ -31,7 +30,7 @@ use Phossa2\Logger\Formatter\FormatterAwareInterface;
  * @version 2.0.0
  * @since   2.0.0 added
  */
-abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterface, FormatterAwareInterface
+abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterface
 {
     use FormatterAwareTrait;
 
@@ -55,7 +54,7 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
      * @param  string $logLevel
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
-     * @access protected
+     * @access public
      */
     public function __construct(
         /*# string */ $level = LogLevel::WARNING,
@@ -72,7 +71,7 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
      */
     public function __invoke(LogEntryInterface $logEntry)
     {
-        if ($this->isHandling($logEntry->getLevel())) {
+        if ($this->isHandling($logEntry)) {
             // format message
             ($this->getFormatter())($logEntry);
 
@@ -97,19 +96,49 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     }
 
     /**
-     * Is this handler handling this level of message ?
+     * Is this handler handling this log ?
+     *
+     * @param  LogEntryInterface $logEntry
+     * @return bool
+     * @access protected
+     */
+    protected function isHandling(LogEntryInterface $logEntry)/*# : bool */
+    {
+        if ($this->isHandlingLevel($logEntry->getLevel()) &&
+            $this->isHandlingOther($logEntry)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Is this handler handling this log level ?
      *
      * @param  string $level
      * @return bool
      * @access protected
      */
-    protected function isHandling(/*# string */ $level)/*# : bool */
+    protected function isHandlingLevel(/*# string */ $level)/*# : bool */
     {
         if (LogLevel::$levels[$level] >= LogLevel::$levels[$this->level]) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * To be overriden by siblings
+     *
+     * @param  LogEntryInterface $logEntry
+     * @return bool
+     * @access protected
+     */
+    protected function isHandlingOther(LogEntryInterface $logEntry)/*# : bool */
+    {
+        return true;
     }
 
     /**
@@ -127,5 +156,32 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
      */
     protected function close()
     {
+    }
+
+    /**
+     * Get EOL char base on platform windows or Unix
+     *
+     * @return string
+     * @access protected
+     */
+    protected function getEol()/*# : string */
+    {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            return "\r\n";
+
+        } else {
+            return "\n";
+        }
+    }
+
+    /**
+     * Test to see if in CLI mode
+     *
+     * @return bool
+     * @access protected
+     */
+    protected function isCliMode()/*# : bool */
+    {
+        return 'cli' === php_sapi_name();
     }
 }

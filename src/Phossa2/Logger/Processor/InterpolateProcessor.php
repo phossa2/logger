@@ -14,20 +14,21 @@
 
 namespace Phossa2\Logger\Processor;
 
-use Phossa2\Shared\Base\ObjectAbstract;
 use Phossa2\Logger\Entry\LogEntryInterface;
 
 /**
  * InterpolateProcessor
  *
+ * Replace '{placeholder}' with values from context in the log message.
+ * Should be the last processor in the queue before log handling.
+ *
  * @package Phossa2\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     ObjectAbstract
- * @see     ProcessorInterface
+ * @see     ProcessorAbstract
  * @version 2.0.0
  * @since   2.0.0 added
  */
-class InterpolateProcessor extends ObjectAbstract implements ProcessorInterface
+class InterpolateProcessor extends ProcessorAbstract
 {
     /**
      * Replace any '{item}' in the messsage with context['item'] value

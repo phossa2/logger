@@ -31,7 +31,7 @@ interface FormatterAwareInterface
      * @return $this
      * @access public
      */
-    public function setFormatter(callable $formatter);
+    public function setFormatter(callable $formatter = null);
 
     /**
      * Get formatter
