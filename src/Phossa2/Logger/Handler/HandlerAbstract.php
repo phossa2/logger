@@ -57,7 +57,7 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
      * @access public
      */
     public function __construct(
-        /*# string */ $level = LogLevel::WARNING,
+        /*# string */ $level = LogLevel::DEBUG,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {

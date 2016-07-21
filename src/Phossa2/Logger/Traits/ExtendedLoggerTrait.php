@@ -14,11 +14,10 @@
 
 namespace Phossa2\Logger\Traits;
 
-use Phossa2\Logger\Message\Message;
 use Phossa2\Shared\Queue\PriorityQueue;
 use Phossa2\Shared\Globbing\GlobbingTrait;
 use Phossa2\Logger\Entry\LogEntryInterface;
-use Phossa2\Logger\Exception\RuntimeException;
+use Phossa2\Shared\Queue\PriorityQueueInterface;
 
 /**
  * ExtendedLoggerTrait
@@ -50,44 +49,30 @@ trait ExtendedLoggerTrait
     protected $processors = [];
 
     /**
-     * channel name
+     * default channel name
      *
      * @var    string
      * @access protected
      */
-    protected $channel = 'LOGGER';
+    protected $default_channel;
 
     /**
-     * marker for set channel
+     * Current channel name
      *
-     * @var    bool
+     * @var    string
      * @access protected
      */
-    protected $channel_set = false;
+    protected $current_channel;
 
     /**
-     * Set channel for this log
-     *
-     * @param  string $channel
-     * @return $this
-     * @access protected
-     */
-    protected function setChannel(/*# string */ $channel)
-    {
-        $this->channel_set = true;
-        $this->channel = strtoupper($channel);
-        return $this;
-    }
-
-    /**
-     * Get logger channel
+     * Get current channel, if not set, get the default channel
      *
      * @return string
      * @access protected
      */
     protected function getChannel()/*# : string */
     {
-        return $this->channel;
+        return $this->current_channel ?: $this->default_channel;
     }
 
     /**
@@ -106,18 +91,15 @@ trait ExtendedLoggerTrait
         /*# string */ $channel,
         /*# int */ $priority
     ) {
-        // use current $logger channel
-        if (empty($channel)) {
-            $channel = $this->getChannel();
-        }
-
         $q = &$this->$type;
-        if (!isset($q[$channel])) {
-            $q[$channel] = new PriorityQueue();
+        $c = strtoupper($channel);
+
+        if (!isset($q[$c])) {
+            $q[$c] = new PriorityQueue();
         }
 
         /* @var PriorityQueue $queue */
-        $queue = $q[$channel];
+        $queue = $q[$c];
         $queue->insert($callable, $priority);
 
         return $this;
@@ -127,27 +109,49 @@ trait ExtendedLoggerTrait
      * Remove callable for $type
      *
      * @param  string $type
-     * @param  callable $callable
+     * @param  callable|string $callableOrClassname
      * @param  string $channel
      * @return $this
      * @access protected
      */
     protected function removeCallable(
         /*# string */ $type,
-        callable $callable,
+        $callableOrClassname,
         /*# string */ $channel
     ) {
         $channels = $channel ? (array) $channel : $this->getAllChannels($type);
 
         $q = &$this->$type;
-        foreach ($channels as $c) {
+        foreach ($channels as $ch) {
+            $c = strtoupper($ch);
             /* @var PriorityQueue $queue */
             if (isset($q[$c])) {
-                $queue = $q[$c];
-                $queue->remove($callable);
+                $this->removeFromQueue($q[$c], $callableOrClassname);
             }
         }
         return $this;
+    }
+
+    /**
+     * Remove callable or matching classname object from the queue
+     *
+     * @param  PriorityQueueInterface $queue
+     * @param  callable|string $callabOrClassname
+     * @access protected
+     */
+    protected function removeFromQueue(
+        PriorityQueueInterface $queue,
+        $callabOrClassname
+    ) {
+        if (is_object($callabOrClassname)) {
+            $queue->remove($callabOrClassname);
+        } else {
+            foreach ($queue as $data) {
+                if (is_a($data['data'], $callabOrClassname)) {
+                    $queue->remove($data['data']);
+                }
+            }
+        }
     }
 
     /**
@@ -238,31 +242,5 @@ trait ExtendedLoggerTrait
         }
 
         return $queue;
-    }
-
-    /**
-     * Check if channel is set with $logger($channel)
-     *
-     * @throws RuntimeException
-     * @access protected
-     */
-    protected function isChannelSet()
-    {
-        if (!$this->channel_set) {
-            throw new RuntimeException(
-                Message::get(Message::LOG_CHANNEL_NOTSET),
-                Message::LOG_CHANNEL_NOTSET
-            );
-        }
-    }
-
-    /**
-     * Mark channel is unset
-     *
-     * @access protected
-     */
-    protected function unsetChannel()
-    {
-        $this->channel_set = false;
     }
 }

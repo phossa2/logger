@@ -20,6 +20,7 @@ use Phossa2\Shared\Base\ObjectAbstract;
 use Phossa2\Logger\Traits\ExtendedLoggerTrait;
 use Phossa2\Logger\Entry\LogEntryPrototypeTrait;
 use Phossa2\Logger\Entry\LogEntryPrototypeInterface;
+use Phossa2\Logger\Entry\LogEntryInterface;
 
 /**
  * Logger
@@ -30,6 +31,7 @@ use Phossa2\Logger\Entry\LogEntryPrototypeInterface;
  * @author  Hong Zhang <phossa@126.com>
  * @see     ObjectAbstract
  * @see     LoggerInterface
+ * @see     LogEntryPrototypeInterface
  * @version 2.0.0
  * @since   2.0.0 added
  */
@@ -38,16 +40,31 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
     use LoggerTrait, LogEntryPrototypeTrait, ExtendedLoggerTrait;
 
     /**
-     * Must set current channel name EACH TIME!
+     * Instantiate with default channel name and log entry prototype
      *
-     * @param  string $channel
-     * @return $this
-     * @access public
-     * @api
+     * @param  string $channel default channel
+     * @param  LogEntryInterface $entryPrototype if any
+     * @access protected
      */
-    public function __invoke(/*# string */ $channel)
+    public function __construct(
+        /*# string */ $channel = 'LOGGER',
+        LogEntryInterface $entryPrototype = null
+    ) {
+        $this->default_channel = strtoupper($channel);
+        $this->setLogEntryPrototype($entryPrototype);
+    }
+
+    /**
+     * Set/With current channel, followed by any log() method
+     *
+     * @param  string $channel current channel
+     * @return $this
+     * @access protected
+     */
+    public function with(/*# string */ $channel)
     {
-        return $this->setChannel($channel);
+        $this->current_channel = strtoupper($channel);
+        return $this;
     }
 
     /**
@@ -60,9 +77,6 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
      */
     public function log($level, $message, array $context = array())
     {
-        // make sure channel is set with $logger($channel)
-        $this->isChannelSet();
-
         // create log entry
         $entry = $this->newLogEntry(
             $this->getChannel(), $level, $message, $context
@@ -74,14 +88,12 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
         // run handlers
         $this->runHandlers($entry);
 
-        // mark channel unset
-        $this->unsetChannel();
+        // unset current channel
+        $this->current_channel = null;
     }
 
     /**
      * Add handler to the channel with priority
-     *
-     * if $channel == '', use current logger channel
      *
      * @param  callable $handler
      * @param  string $channel channel to listen to
@@ -92,7 +104,7 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
      */
     public function addHandler(
         callable $handler,
-        /*# string */ $channel = '',
+        /*# string */ $channel = '*',
         /*# int */ $priority = 0
     ) {
         return $this->addCallable('handlers', $handler, $channel, $priority);
@@ -103,21 +115,19 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
      *
      * if $channel == '', then remove this handler from all channels
      *
-     * @param  callable $handler
+     * @param  callable|string $handlerOrClassname
      * @param  string $channel
      * @return $this
      * @access public
      * @api
      */
-    public function removeHandler(callable $handler, $channel = '')
+    public function removeHandler($handlerOrClassname, $channel = '')
     {
-        return $this->removeCallable('handlers', $handler, $channel);
+        return $this->removeCallable('handlers', $handlerOrClassname, $channel);
     }
 
     /**
      * Add processor to the channel with priority
-     *
-     * if $channel == '', use current logger channel
      *
      * @param  callable $processor
      * @param  string $channel channel to listen to
@@ -128,7 +138,7 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
      */
     public function addProcessor(
         callable $processor,
-        /*# string */ $channel = '',
+        /*# string */ $channel = '*',
         /*# int */ $priority = 0
     ) {
         return $this->addCallable('processors', $processor, $channel, $priority);
@@ -139,14 +149,16 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
      *
      * if $channel == '', then remove processor from all channels
      *
-     * @param  callable $processor
+     * @param  callable|string $processorOrClassname
      * @param  string $channel
      * @return $this
      * @access public
      * @api
      */
-    public function removeProcessor(callable $processor, $channel = '')
+    public function removeProcessor($processorOrClassname, $channel = '')
     {
-        return $this->removeCallable('processors', $processor, $channel);
+        return $this->removeCallable(
+            'processors', $processorOrClassname, $channel
+        );
     }
 }

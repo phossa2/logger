@@ -239,7 +239,10 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
      */
     public function __toString()/*# : string */
     {
-        $formatter = new DefaultFormatter();
-        return $formatter($this);
+        if (null === $this->formatted) {
+            $formatter = new DefaultFormatter();
+            $formatter($this);
+        }
+        return $this->formatted;
     }
 }
