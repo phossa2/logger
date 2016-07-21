@@ -180,8 +180,7 @@ trait ExtendedLoggerTrait
 
         // loop thru these processors
         foreach($queue as $data) {
-            $processor = $data['data'];
-            $processor($logEntry);
+            call_user_func($data['data'], $logEntry);
         }
 
         return $this;
@@ -207,8 +206,7 @@ trait ExtendedLoggerTrait
             }
 
             // run handler
-            $handler = $data['data'];
-            $handler($logEntry);
+            call_user_func($data['data'], $logEntry);
         }
 
         return $this;

@@ -73,7 +73,7 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     {
         if ($this->isHandling($logEntry)) {
             // format message
-            ($this->getFormatter())($logEntry);
+            call_user_func($this->getFormatter(), $logEntry);
 
             // write method
             $this->write($logEntry);

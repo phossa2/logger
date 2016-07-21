@@ -17,10 +17,10 @@ namespace Phossa2\Logger;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LoggerInterface;
 use Phossa2\Shared\Base\ObjectAbstract;
+use Phossa2\Logger\Entry\LogEntryInterface;
 use Phossa2\Logger\Traits\ExtendedLoggerTrait;
 use Phossa2\Logger\Entry\LogEntryPrototypeTrait;
 use Phossa2\Logger\Entry\LogEntryPrototypeInterface;
-use Phossa2\Logger\Entry\LogEntryInterface;
 
 /**
  * Logger
