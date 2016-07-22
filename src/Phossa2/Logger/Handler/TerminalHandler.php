@@ -14,7 +14,6 @@
 
 namespace Phossa2\Logger;
 
-use Phossa2\Logger\LogLevel;
 use Phossa2\Logger\Message\Message;
 use Phossa2\Logger\Handler\StreamHandler;
 use Phossa2\Logger\Entry\LogEntryInterface;
@@ -32,6 +31,7 @@ use Phossa2\Logger\Formatter\AnsiColorFormatter;
  * @see     StreamHandler
  * @version 2.0.0
  * @since   2.0.0 added
+ * @since   2.0.1 updated constructor
  */
 class TerminalHandler extends StreamHandler
 {
@@ -48,30 +48,28 @@ class TerminalHandler extends StreamHandler
      *
      * @param  string $stream the stream
      * @param  bool $color use ANSI color formatter or not
-     * @param  string $level
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
      * @access public
+     * @since  2.0.1 removed level param
      */
     public function __construct(
         /*# string */ $stream = 'php://stderr',
         /*# bool */ $color = true,
-        /*# string */ $level = LogLevel::DEBUG,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {
-        if (!$this->isCliMode()) {
-            return;
-        }
-        $this->color = (bool) $color;
+        if ($this->isCliMode()) {
+            $this->color = (bool) $color;
 
-        if (!in_array($stream, ['php://stderr', 'php://stdout'])) {
-            throw new LogicException(
-                Message::get(Message::LOG_STREAM_INVALID, $stream),
-                Message::LOG_STREAM_INVALID
-            );
+            if (!in_array($stream, ['php://stderr', 'php://stdout'])) {
+                throw new LogicException(
+                    Message::get(Message::LOG_STREAM_INVALID, $stream),
+                    Message::LOG_STREAM_INVALID
+                );
+            }
+            parent::__construct($stream, $formatter, $stopPropagation);
         }
-        parent::__construct($stream, $level, $formatter, $stopPropagation);
     }
 
     /**
@@ -90,9 +88,11 @@ class TerminalHandler extends StreamHandler
     }
 
     /**
+     * Only if in CLI mode
+     *
      * {@inheritDoc}
      */
-    protected function isHandlingOther(LogEntryInterface $logEntry)/*# : bool */
+    protected function isHandling(LogEntryInterface $logEntry)/*# : bool */
     {
         return $this->isCliMode();
     }

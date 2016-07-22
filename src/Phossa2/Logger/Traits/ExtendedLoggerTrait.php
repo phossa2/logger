@@ -14,6 +14,7 @@
 
 namespace Phossa2\Logger\Traits;
 
+use Phossa2\Logger\LogLevel;
 use Phossa2\Shared\Queue\PriorityQueue;
 use Phossa2\Shared\Globbing\GlobbingTrait;
 use Phossa2\Logger\Entry\LogEntryInterface;
@@ -27,6 +28,7 @@ use Phossa2\Shared\Queue\PriorityQueueInterface;
  * @see     interface
  * @version 2.0.0
  * @since   2.0.0 added
+ * @since   2.0.1 updated addCallable(), runHandlers()
  */
 trait ExtendedLoggerTrait
 {
@@ -82,14 +84,17 @@ trait ExtendedLoggerTrait
      * @param  callable $callable
      * @param  string $channel
      * @param  int $priority  -100 - +100
+     * @param  string $level
      * @return $this
      * @access protected
+     * @since  2.0.1 added level here
      */
     protected function addCallable(
         /*# string */ $type,
         callable $callable,
         /*# string */ $channel,
-        /*# int */ $priority
+        /*# int */ $priority,
+        /*# string */ $level = ''
     ) {
         $q = &$this->$type;
         $c = strtoupper($channel);
@@ -100,7 +105,7 @@ trait ExtendedLoggerTrait
 
         /* @var PriorityQueue $queue */
         $queue = $q[$c];
-        $queue->insert($callable, $priority);
+        $queue->insert($callable, $priority, $level);
 
         return $this;
     }
@@ -192,6 +197,7 @@ trait ExtendedLoggerTrait
      * @param  LogEntryInterface $logEntry
      * @return $this
      * @access protected
+     * @since  2.0.1 added level checking here
      */
     protected function runHandlers(LogEntryInterface $logEntry)
     {
@@ -205,8 +211,11 @@ trait ExtendedLoggerTrait
                 break;
             }
 
-            // run handler
-            call_user_func($data['data'], $logEntry);
+            // run handler only if level allowed
+            if (LogLevel::$levels[$logEntry->getLevel()] >=
+                LogLevel::$levels[$data['extra']]) {
+                call_user_func($data['data'], $logEntry);
+            }
         }
 
         return $this;

@@ -63,7 +63,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputRegex('/LOGGER\.DEBUG: test/');
 
         // add echoHandler
-        $this->object->addHandler(new EchoHandler());
+        $this->object->addHandler('debug', new EchoHandler());
 
         // debug
         $this->object->debug('test');
@@ -77,7 +77,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputRegex('/TEST\.WARNING: test/');
 
         // add echoHandler
-        $this->object->addHandler(new EchoHandler());
+        $this->object->addHandler('debug', new EchoHandler());
 
         // debug
         $this->object->with('test')->warning('test');
@@ -94,20 +94,17 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         // add echoHandler 1
         $this->object->addHandler(
-            new EchoHandler('debug', new DefaultFormatter('1')),
-            '*', -10
+            'debug', new EchoHandler(new DefaultFormatter('1')), '*', -10
         );
 
         // add echoHandler 2
         $this->object->addHandler(
-            new EchoHandler('debug', new DefaultFormatter('2')),
-            '*', 10
+            'debug', new EchoHandler(new DefaultFormatter('2')), '*', 10
         );
 
         // add echoHandler 3
         $this->object->addHandler(
-            new EchoHandler('debug', new DefaultFormatter('3')),
-            '*', 10
+            'debug', new EchoHandler(new DefaultFormatter('3')), '*', 10
         );
 
         // debug
@@ -125,20 +122,17 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         // add echoHandler 1
         $this->object->addHandler(
-            new EchoHandler('debug', new DefaultFormatter('1')),
-            '*', -10
+            'debug', new EchoHandler(new DefaultFormatter('1')), '*', -10
         );
 
         // add echoHandler 2
         $this->object->addHandler(
-            new EchoHandler('warning', new DefaultFormatter('2')),
-            '*', 10
+            'warning', new EchoHandler(new DefaultFormatter('2')), '*', 10
         );
 
         // add echoHandler 3
         $this->object->addHandler(
-            new EchoHandler('error', new DefaultFormatter('3')),
-            '*', 10
+            'error', new EchoHandler(new DefaultFormatter('3')), '*', 10
         );
 
         // warning
@@ -156,20 +150,17 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         // add echoHandler 1
         $this->object->addHandler(
-            new EchoHandler('debug', new DefaultFormatter('1')),
-            'user.*', -10
+            'debug', new EchoHandler(new DefaultFormatter('1')), 'user.*', -10
         );
 
         // add echoHandler 2
         $this->object->addHandler(
-            new EchoHandler('debug', new DefaultFormatter('2')),
-            '*.watch', 10
+            'debug', new EchoHandler(new DefaultFormatter('2')), '*.watch', 10
         );
 
         // add echoHandler 3
         $this->object->addHandler(
-            new EchoHandler('debug', new DefaultFormatter('3')),
-            'system.*', 10
+            'debug', new EchoHandler(new DefaultFormatter('3')), 'system.*', 10
         );
 
         // warning
@@ -183,28 +174,29 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveHandler()
     {
-        $this->expectOutputString("1test1test");
+        $this->expectOutputString("1testA1testB");
 
-        $handler = new EchoHandler('debug', new DefaultFormatter('1%message%'));
+        $handler = new EchoHandler(new DefaultFormatter('1%message%'));
 
         // add echoHandler 1
-        $this->object->addHandler($handler, 'user.*', -10);
+        $this->object->addHandler('debug', $handler, 'user.*', -10);
 
         // add echoHandler 2
-        $this->object->addHandler($handler, '*.login', 10);
+        $this->object->addHandler('info', $handler, '*.login', 10);
 
-        $this->object->with('user.login')->warning('test');
+        // should be only one executed
+        $this->object->with('user.login')->warning('testA');
 
         // remove 1
         $this->object->removeHandler($handler, '*.login');
 
         // warning
-        $this->object->with('user.login')->warning('test');
+        $this->object->with('user.login')->warning('testB');
 
         // remove all by classname
         $this->object->removeHandler($handler::getClassName());
 
-        $this->object->with('user.login')->warning('test');
+        $this->object->with('user.login')->warning('testC');
     }
 
     /**
@@ -216,7 +208,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectOutputString("12{counter}");
 
-        $h = new EchoHandler('debug', new DefaultFormatter('%message%'));
+        $h = new EchoHandler(new DefaultFormatter('%message%'));
 
         // add processors
         $counter = new CounterProcessor();
@@ -228,7 +220,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->object->addProcessor(new InterpolateProcessor(), '*', -100);
 
         // add handlers
-        $this->object->addHandler($h);
+        $this->object->addHandler('debug', $h);
 
 
         $this->object->with('user.login')->debug('{counter}');
@@ -245,7 +237,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectOutputString("3{counter}4{counter}");
 
-        $h = new EchoHandler('debug', new DefaultFormatter('%message%'));
+        $h = new EchoHandler(new DefaultFormatter('%message%'));
 
         // add processors
         $counter = new CounterProcessor();
@@ -257,7 +249,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->object->addProcessor(new InterpolateProcessor(), '*', -100);
 
         // add handlers
-        $this->object->addHandler($h);
+        $this->object->addHandler('debug', $h);
 
         $this->object->debug('{counter}');
 
@@ -283,7 +275,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->object->setLogEntryPrototype(new MyLogEntry('TEST', 'debug', ''));
 
         $this->object->addHandler(
-            new EchoHandler('debug', new DefaultFormatter('%message%'))
+            'debug', new EchoHandler(new DefaultFormatter('%message%'))
         );
 
         $this->expectOutputString("MyLogEntry: test");

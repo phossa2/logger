@@ -14,7 +14,6 @@
 
 namespace Phossa2\Logger\Handler;
 
-use Phossa2\Logger\LogLevel;
 use Phossa2\Shared\Base\ObjectAbstract;
 use Phossa2\Logger\Entry\LogEntryInterface;
 use Phossa2\Logger\Formatter\FormatterInterface;
@@ -29,19 +28,14 @@ use Phossa2\Logger\Formatter\FormatterAwareTrait;
  * @see     HandlerInterface
  * @version 2.0.0
  * @since   2.0.0 added
+ * @since   2.0.1 removed level param from constructor
  */
 abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterface
 {
     use FormatterAwareTrait;
 
     /**
-     * @var    string
-     * @access protected
-     */
-    protected $level;
-
-    /**
-     * Stop log propagation
+     * Stop log propagation after this handler ?
      *
      * @var    bool
      * @access protected
@@ -52,16 +46,15 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
      * Created with level handling
      *
      * @param  string $level
-     * @param  FormatterInterface $formatter
-     * @param  bool $stopPropagation
+     * @param  FormatterInterface $formatter if any
+     * @param  bool $stopPropagation if u want to
      * @access public
+     * @since  2.0.1 removed level param
      */
     public function __construct(
-        /*# string */ $level = LogLevel::DEBUG,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {
-        $this->level = $level;
         $this->stop  = (bool) $stopPropagation;
         $this->setFormatter($formatter);
     }
@@ -72,13 +65,13 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     public function __invoke(LogEntryInterface $logEntry)
     {
         if ($this->isHandling($logEntry)) {
-            // format message
+            // format message with formatter
             call_user_func($this->getFormatter(), $logEntry);
 
-            // write method
+            // write method of this handler
             $this->write($logEntry);
 
-            // stop propagation
+            // stop propagation if u want to
             if ($this->stop) {
                 $logEntry->stopPropagation(true);
             }
@@ -96,53 +89,7 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     }
 
     /**
-     * Is this handler handling this log ?
-     *
-     * @param  LogEntryInterface $logEntry
-     * @return bool
-     * @access protected
-     */
-    protected function isHandling(LogEntryInterface $logEntry)/*# : bool */
-    {
-        if ($this->isHandlingLevel($logEntry->getLevel()) &&
-            $this->isHandlingOther($logEntry)
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Is this handler handling this log level ?
-     *
-     * @param  string $level
-     * @return bool
-     * @access protected
-     */
-    protected function isHandlingLevel(/*# string */ $level)/*# : bool */
-    {
-        if (LogLevel::$levels[$level] >= LogLevel::$levels[$this->level]) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * To be overriden by siblings
-     *
-     * @param  LogEntryInterface $logEntry
-     * @return bool
-     * @access protected
-     */
-    protected function isHandlingOther(LogEntryInterface $logEntry)/*# : bool */
-    {
-        return true;
-    }
-
-    /**
-     * Write to the device
+     * Write to handler's device
      *
      * @param  LogEntryInterface $logEntry
      * @access protected
@@ -150,7 +97,21 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     abstract protected function write(LogEntryInterface $logEntry);
 
     /**
-     * Close the handler, to be extended by siblings
+     * Is this handler handling this log ?
+     *
+     * To be overriden by child classes
+     *
+     * @param  LogEntryInterface $logEntry
+     * @return bool
+     * @access protected
+     */
+    protected function isHandling(LogEntryInterface $logEntry)/*# : bool */
+    {
+        return true;
+    }
+
+    /**
+     * Close the handler, to be overriden by child classes
      *
      * @access protected
      */
@@ -159,7 +120,7 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     }
 
     /**
-     * Get EOL char base on platform windows or Unix
+     * Get EOL char base on the platform WIN or UNIX
      *
      * @return string
      * @access protected
@@ -168,7 +129,6 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     {
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             return "\r\n";
-
         } else {
             return "\n";
         }

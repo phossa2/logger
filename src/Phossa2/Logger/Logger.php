@@ -16,11 +16,13 @@ namespace Phossa2\Logger;
 
 use Psr\Log\LoggerTrait;
 use Psr\Log\LoggerInterface;
+use Phossa2\Logger\Message\Message;
 use Phossa2\Shared\Base\ObjectAbstract;
 use Phossa2\Logger\Entry\LogEntryInterface;
 use Phossa2\Logger\Traits\ExtendedLoggerTrait;
 use Phossa2\Logger\Entry\LogEntryPrototypeTrait;
 use Phossa2\Logger\Entry\LogEntryPrototypeInterface;
+use Phossa2\Logger\Exception\InvalidArgumentException;
 
 /**
  * Logger
@@ -34,6 +36,7 @@ use Phossa2\Logger\Entry\LogEntryPrototypeInterface;
  * @see     LogEntryPrototypeInterface
  * @version 2.0.0
  * @since   2.0.0 added
+ * @since   2.0.1 updated addHandler() with level support
  */
 class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototypeInterface
 {
@@ -95,19 +98,32 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
     /**
      * Add handler to the channel with priority
      *
+     * @param  string $level the level this handler is handling
      * @param  callable $handler
      * @param  string $channel channel to listen to
      * @param  int $priority
      * @return $this
      * @access public
+     * @since  2.0.1 added level param
      * @api
      */
     public function addHandler(
+        /*# string */ $level,
         callable $handler,
         /*# string */ $channel = '*',
         /*# int */ $priority = 0
     ) {
-        return $this->addCallable('handlers', $handler, $channel, $priority);
+        // check level
+        if (!isset(LogLevel::$levels[$level])) {
+            throw new InvalidArgumentException(
+                Message::get(Message::LOG_LEVEL_INVALID, $level),
+                Message::LOG_LEVEL_INVALID
+            );
+        }
+
+        return $this->addCallable(
+            'handlers', $handler, $channel, $priority, $level
+        );
     }
 
     /**
@@ -141,7 +157,9 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
         /*# string */ $channel = '*',
         /*# int */ $priority = 0
     ) {
-        return $this->addCallable('processors', $processor, $channel, $priority);
+        return $this->addCallable(
+            'processors', $processor, $channel, $priority
+        );
     }
 
     /**

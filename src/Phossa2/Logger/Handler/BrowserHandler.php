@@ -14,7 +14,6 @@
 
 namespace Phossa2\Logger\Handler;
 
-use Phossa2\Logger\LogLevel;
 use Phossa2\Logger\Entry\LogEntryInterface;
 use Phossa2\Logger\Formatter\FormatterInterface;
 
@@ -33,6 +32,7 @@ use Phossa2\Logger\Formatter\FormatterInterface;
  * @see     HandlerAbstract
  * @version 2.0.0
  * @since   2.0.0 added
+ * @since   2.0.1 updated constructor, isHandling() etc.
  */
 class BrowserHandler extends HandlerAbstract
 {
@@ -47,21 +47,21 @@ class BrowserHandler extends HandlerAbstract
 
     /**
      * {@inheritDoc}
+     *
+     * @since 2.0.1 removed level param
      */
     public function __construct(
-        /*# string */ $level = LogLevel::DEBUG,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {
-        // skip CLI mode
-        if ($this->isCliMode()) {
-            return;
+        // non CLI mode only
+        if (!$this->isCliMode()) {
+            // register flush method
+            register_shutdown_function([__CLASS__, 'flush']);
+
+            // call parent constructor
+            parent::__construct($formatter, $stopPropagation);
         }
-
-        // register flush
-        register_shutdown_function([__CLASS__, 'flush']);
-
-        parent::__construct($level, $formatter, $stopPropagation);
     }
 
     /**
@@ -69,15 +69,16 @@ class BrowserHandler extends HandlerAbstract
      */
     protected function write(LogEntryInterface $logEntry)
     {
+        // record all messages
         static::$messages[] = $logEntry->getFormatted();
     }
 
     /**
-     * Only use this handler in browser mode
+     * Only if not in CLI mode
      *
      * {@inheritDoc}
      */
-    protected function isHandlingOther(LogEntryInterface $logEntry)/*# : bool */
+    protected function isHandling(LogEntryInterface $logEntry)/*# : bool */
     {
         return !$this->isCliMode();
     }
@@ -99,7 +100,7 @@ class BrowserHandler extends HandlerAbstract
     }
 
     /**
-     * Is 'browserhandler' header set ？
+     * Is 'X-BrowserHandler' header set ？
      *
      * @return bool
      * @access protected
@@ -108,7 +109,7 @@ class BrowserHandler extends HandlerAbstract
     protected static function hasHttpHeader()/*# : bool */
     {
         foreach (headers_list() as $header) {
-            if (false !== stripos($header, 'browserhandler')) {
+            if (false !== stripos($header, 'x-browserhandler')) {
                 return true;
             }
         }
@@ -116,7 +117,7 @@ class BrowserHandler extends HandlerAbstract
     }
 
     /**
-     * Generate the javascript
+     * Generate the javascript with spooled messages
      *
      * @return string
      * @access protected

@@ -14,7 +14,6 @@
 
 namespace Phossa2\Logger\Handler;
 
-use Phossa2\Logger\LogLevel;
 use Phossa2\Logger\Message\Message;
 use Phossa2\Logger\Entry\LogEntryInterface;
 use Phossa2\Logger\Exception\LogicException;
@@ -30,6 +29,7 @@ use Phossa2\Logger\Formatter\FormatterInterface;
  * @see     HandlerAbstract
  * @version 2.0.0
  * @since   2.0.0 added
+ * @since   2.0.1 updated constructor
  */
 class StreamHandler extends HandlerAbstract
 {
@@ -45,14 +45,13 @@ class StreamHandler extends HandlerAbstract
      * Constructor
      *
      * @param  string|resource $stream the stream
-     * @param  string $level
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
      * @access public
+     * @since  2.0.1 removed level param
      */
     public function __construct(
         $stream,
-        /*# string */ $level = LogLevel::DEBUG,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {
@@ -67,7 +66,7 @@ class StreamHandler extends HandlerAbstract
         }
         $this->stream = $strm;
 
-        parent::__construct($level, $formatter, $stopPropagation);
+        parent::__construct($formatter, $stopPropagation);
     }
 
     /**

@@ -30,6 +30,7 @@ use Phossa2\Logger\Formatter\FormatterInterface;
  * @see     HandlerAbstract
  * @version 2.0.0
  * @since   2.0.0 added
+ * @since   2.0.1 updated constructor
  */
 class SyslogHandler extends HandlerAbstract
 {
@@ -69,21 +70,20 @@ class SyslogHandler extends HandlerAbstract
     /**
      * @param  int $facility
      * @param  int $logOpts
-     * @param  string $level
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
      * @access public
+     * @since  2.0.1 removed level param
      */
     public function __construct(
         /*# int */ $facility = LOG_USER,
         /*# int */ $logOpts  = LOG_PID,
-        /*# string */ $level = LogLevel::DEBUG,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {
         $this->facility = $facility;
         $this->logopts  = $logOpts;
-        parent::__construct($level, $formatter, $stopPropagation);
+        parent::__construct($formatter, $stopPropagation);
     }
 
     /**

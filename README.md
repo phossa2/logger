@@ -53,16 +53,16 @@ use Phossa2\Logger\Processor\InterpolateProcessor;
 $logger = new Logger('MyApp');
 
 // attach memory processor
-$logger->addProcessor(new MemoryProcessor);
+$logger->addProcessor(new MemoryProcessor());
 
 // attach interpolate processor to all channels' ('*') end (-100)
 $logger->addProcessor(new InterpolateProcessor(), '*', -100);
 
 // attach syslog handler to user related channels
-$logger->addHandler(new SyslogHandler(), 'user.*');
+$logger->addHandler('debug', new SyslogHandler(), 'user.*');
 
 // attach file handler to all channels
-$logger->addHandler(new LogfileHandler('/tmp/app.log', 'warning'));
+$logger->addHandler('warning', new LogfileHandler('/tmp/app.log'));
 
 // log to system.usage channel
 $logger
@@ -94,10 +94,10 @@ Features
 
     ```php
     // bind to 'user.*' channels
-    $logger->addHandler(new LogfileHandler('/log/user.log', 'warning'), 'user.*');
+    $logger->addHandler('warning', new LogfileHandler('/log/user.log'), 'user.*');
 
     // bind to 'system.*' channels
-    $logger->addHandler(new LogfileHandler('/log/system.log', 'error'), 'system.*');
+    $logger->addHandler('error', new LogfileHandler('/log/system.log'), 'system.*');
 
     // add user info only in 'user.*' channel
     $logger->addProcessor(new UserProcessor(), 'user.*');
@@ -147,10 +147,10 @@ Features
 
     ```php
     // log to file first
-    $logger->addHandler(new LogfileHandler('/log/log.txt'));
+    $logger->addHandler('debug', new LogfileHandler('/log/log.txt'));
 
     // then log to mail
-    $logger->addHandler(new MailHandler('admin@my.com'));
+    $logger->addHandler('debug', new MailHandler('admin@my.com'));
     ```
 
 - <a name="callable"></a>**Simple callable interface**
@@ -179,7 +179,7 @@ Features
   Or even,
 
   ```php
-  $logger->addHandler(function($log) {
+  $logger->addHandler('error', function($log) {
       // write the log to my device
   }, 'user.*');
   ```
@@ -201,7 +201,7 @@ Features
   Use it in your logger as the prototype for all log messages,
 
   ```php
-  $entryPrototype = new MyLogEntry('channle','debug', 'message');
+  $entryPrototype = new MyLogEntry('channel','debug', 'message');
 
   $logger = new Logger('MyApp', $entryPrototype);
   ```
@@ -223,7 +223,7 @@ APIs
 
     Specify the channel for the comming logging method.
 
-  - `addHandler(callable $handler, string $channel = '*', int $priority = 0): $this`
+  - `addHandler(string $level, callable $handler, string $channel = '*', int $priority = 0): $this`
 
     Add one handler to specified channel with the priority.
 

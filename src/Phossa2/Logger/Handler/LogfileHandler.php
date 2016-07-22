@@ -14,7 +14,6 @@
 
 namespace Phossa2\Logger\Handler;
 
-use Phossa2\Logger\LogLevel;
 use Phossa2\Logger\Message\Message;
 use Phossa2\Logger\Exception\LogicException;
 use Phossa2\Logger\Formatter\FormatterInterface;
@@ -29,6 +28,7 @@ use Phossa2\Logger\Formatter\FormatterInterface;
  * @see     StreamHandler
  * @version 2.0.0
  * @since   2.0.0 added
+ * @since   2.0.1 updated constructor
  */
 class LogfileHandler extends StreamHandler
 {
@@ -44,16 +44,15 @@ class LogfileHandler extends StreamHandler
      *
      * @param  string $path full path
      * @param  int $rotate rotate type or filesize in MB
-     * @param  string $level
      * @param  FormatterInterface $formatter
      * @param  bool $stopPropagation
      * @throws LogicException if path not writable
      * @access public
+     * @since  2.0.1 removed level param
      */
     public function __construct(
         /*# string */ $path,
         /*# int */ $rotate = self::ROTATE_NONE,
-        /*# string */ $level = LogLevel::DEBUG,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {
@@ -70,7 +69,7 @@ class LogfileHandler extends StreamHandler
             $this->doRotation($path, $rotate);
         }
 
-        parent::__construct($path, $level, $formatter, $stopPropagation);
+        parent::__construct($path, $formatter, $stopPropagation);
     }
 
     /**
