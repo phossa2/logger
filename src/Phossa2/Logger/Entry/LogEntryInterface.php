@@ -102,7 +102,9 @@ interface LogEntryInterface
     public function setFormatted(/*# string */ $formatted);
 
     /**
-     * Get the formatted message
+     * Get the formatted message.
+     *
+     * If not formatted yet, will format with 'DefaultFormatter'
      *
      * @return string
      * @access public

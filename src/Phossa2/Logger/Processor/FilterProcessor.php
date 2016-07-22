@@ -55,7 +55,7 @@ class FilterProcessor extends ProcessorAbstract
     public function __invoke(LogEntryInterface $logEntry)
     {
         if (null !== $this->filter &&
-            !($this->filter)($logEntry)
+            !call_user_func($this->filter, $logEntry)
         ) {
             $logEntry->stopPropagation(true);
         }

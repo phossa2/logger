@@ -177,6 +177,10 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
      */
     public function getFormatted()/*# string */
     {
+        if (null === $this->formatted) {
+            $formatter = new DefaultFormatter();
+            $formatter($this);
+        }
         return $this->formatted;
     }
 
@@ -233,16 +237,10 @@ class LogEntry extends ObjectAbstract implements LogEntryInterface
     }
 
     /**
-     * Use the default formatter
-     *
      * {@inheritDoc}
      */
     public function __toString()/*# : string */
     {
-        if (null === $this->formatted) {
-            $formatter = new DefaultFormatter();
-            $formatter($this);
-        }
-        return $this->formatted;
+        return $this->getFormatted();
     }
 }
