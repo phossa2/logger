@@ -45,7 +45,6 @@ abstract class HandlerAbstract extends ObjectAbstract implements HandlerInterfac
     /**
      * Created with level handling
      *
-     * @param  string $level
      * @param  FormatterInterface $formatter if any
      * @param  bool $stopPropagation if u want to
      * @access public
