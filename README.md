@@ -176,6 +176,14 @@ Features
   }
   ```
 
+  Or even,
+
+  ```php
+  $logger->addHandler(function($log) {
+      // write the log to my device
+  }, 'user.*');
+  ```
+
 - <a name="entry"></a>**LogEntry**
 
   In stead of using array as data type for the log message. The
