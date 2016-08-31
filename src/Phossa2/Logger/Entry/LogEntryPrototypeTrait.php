@@ -60,7 +60,6 @@ trait LogEntryPrototypeTrait
     )/*# : EventInterface */ {
         if (is_null($this->entry_proto)) {
             return new LogEntry($channel, $level, $message, $context);
-
         } else {
             $entry = clone $this->entry_proto;
             return $entry

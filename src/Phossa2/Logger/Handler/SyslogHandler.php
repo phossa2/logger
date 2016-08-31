@@ -77,7 +77,7 @@ class SyslogHandler extends HandlerAbstract
      */
     public function __construct(
         /*# int */ $facility = LOG_USER,
-        /*# int */ $logOpts  = LOG_PID,
+        /*# int */ $logOpts = LOG_PID,
         FormatterInterface $formatter = null,
         /*# bool */ $stopPropagation = false
     ) {

@@ -184,7 +184,7 @@ trait ExtendedLoggerTrait
         $queue = $this->getCallables('processors', $logEntry->getChannel());
 
         // loop thru these processors
-        foreach($queue as $data) {
+        foreach ($queue as $data) {
             call_user_func($data['data'], $logEntry);
         }
 
@@ -205,7 +205,7 @@ trait ExtendedLoggerTrait
         $queue = $this->getCallables('handlers', $logEntry->getChannel());
 
         // loop thru these handlers
-        foreach($queue as $data) {
+        foreach ($queue as $data) {
             // stopped ?
             if ($logEntry->isPropagationStopped()) {
                 break;
@@ -236,7 +236,8 @@ trait ExtendedLoggerTrait
 
         // name globbing with all channels
         $matchedChannels = $this->globbingNames(
-            $channel, $this->getAllChannels($type)
+            $channel,
+            $this->getAllChannels($type)
         );
 
         // type queues

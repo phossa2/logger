@@ -82,7 +82,10 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
     {
         // create log entry
         $entry = $this->newLogEntry(
-            $this->getChannel(), $level, $message, $context
+            $this->getChannel(),
+            $level,
+            $message,
+            $context
         );
 
         // run processors
@@ -122,7 +125,11 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
         }
 
         return $this->addCallable(
-            'handlers', $handler, $channel, $priority, $level
+            'handlers',
+            $handler,
+            $channel,
+            $priority,
+            $level
         );
     }
 
@@ -158,7 +165,10 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
         /*# int */ $priority = 0
     ) {
         return $this->addCallable(
-            'processors', $processor, $channel, $priority
+            'processors',
+            $processor,
+            $channel,
+            $priority
         );
     }
 
@@ -176,7 +186,9 @@ class Logger extends ObjectAbstract implements LoggerInterface, LogEntryPrototyp
     public function removeProcessor($processorOrClassname, $channel = '')
     {
         return $this->removeCallable(
-            'processors', $processorOrClassname, $channel
+            'processors',
+            $processorOrClassname,
+            $channel
         );
     }
 }

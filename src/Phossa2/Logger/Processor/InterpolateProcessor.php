@@ -112,13 +112,10 @@ class InterpolateProcessor extends ProcessorAbstract
     {
         if (is_scalar($data)) {
             return strval($data);
-
         } elseif (is_array($data)) {
             return 'ARRAY[' . count($data) . ']';
-
         } elseif (is_object($data)) {
             return $this->getObjectString($data);
-
         } else {
             return 'TYPE: ' . gettype($data);
         }
