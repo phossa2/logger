@@ -1,10 +1,11 @@
 # phossa2/logger
 [![Build Status](https://travis-ci.org/phossa2/logger.svg?branch=master)](https://travis-ci.org/phossa2/logger)
 [![Code Quality](https://scrutinizer-ci.com/g/phossa2/logger/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phossa2/logger/)
+[![Code Climate](https://codeclimate.com/github/phossa2/logger/badges/gpa.svg)](https://codeclimate.com/github/phossa2/logger)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/phossa2/logger/master/badge.svg)](https://travis-ci.org/phossa2/logger)
 [![HHVM](https://img.shields.io/hhvm/phossa2/logger.svg?style=flat)](http://hhvm.h4cc.de/package/phossa2/logger)
 [![Latest Stable Version](https://img.shields.io/packagist/vpre/phossa2/logger.svg?style=flat)](https://packagist.org/packages/phossa2/logger)
-[![License](https://poser.pugx.org/phossa2/logger/license)](http://mit-license.org/)
+[![License](https://img.shields.io/:license-mit-blue.svg)](http://mit-license.org/)
 
 **phossa2/logger** is a [PSR-3][PSR-3] compliant logging library. It is a
 rewrite of Monolog with couple of changes.
@@ -32,7 +33,7 @@ or add the following lines to your `composer.json`
 ```json
 {
     "require": {
-       "phossa2/logger": "^2.0.0"
+       "phossa2/logger": "2.*"
     }
 }
 ```
@@ -241,12 +242,29 @@ APIs
     Remove the processor (or specify processor's classname) from the specified
     channel. If `$channel` is empty, then remove from all channels.
 
+Change log
+---
+
+Please see [CHANGELOG](CHANGELOG.md) from more information.
+
+Testing
+---
+
+```bash
+$ composer test
+```
+
+Contributing
+---
+
+Please see [CONTRIBUTE](CONTRIBUTE.md) for more information.
+
 Dependencies
 ---
 
 - PHP >= 5.4.0
 
-- phossa2/shared >= 2.0.20
+- phossa2/shared >= 2.0.21
 
 License
 ---
