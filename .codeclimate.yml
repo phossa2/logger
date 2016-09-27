@@ -12,6 +12,11 @@ engines:
     enabled: true
   phpmd:
     enabled: true
+    checks:
+      Naming/ShortVariable:
+        enabled: false
+      CleanCode/ElseExpression:
+        enabled: false
 ratings:
   paths:
   - "**.js"
