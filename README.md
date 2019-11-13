@@ -1,4 +1,7 @@
-# phossa2/logger
+# phossa2/logger [ABANDONED]
+
+**PLEASE USE [phoole/logger](https://github.com/phoole/logger) library instead**
+
 [![Build Status](https://travis-ci.org/phossa2/logger.svg?branch=master)](https://travis-ci.org/phossa2/logger)
 [![Code Quality](https://scrutinizer-ci.com/g/phossa2/logger/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phossa2/logger/)
 [![Code Climate](https://codeclimate.com/github/phossa2/logger/badges/gpa.svg)](https://codeclimate.com/github/phossa2/logger)
